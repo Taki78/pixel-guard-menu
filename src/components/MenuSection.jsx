@@ -20,6 +20,29 @@ export default function MenuSection() {
   const [active, setActive] = useState('all')
   const [selectedItem, setSelectedItem] = useState(null)
 
+  // Push a history entry when drawer opens so the phone's back button closes it
+  function openItem(item) {
+    setSelectedItem(item)
+    window.history.pushState({ drawerOpen: true }, '')
+  }
+
+  function closeItem() {
+    // If we pushed a history entry for this drawer, go back (triggers popstate)
+    if (window.history.state?.drawerOpen) {
+      window.history.back()
+    } else {
+      setSelectedItem(null)
+    }
+  }
+
+  useEffect(() => {
+    function onPopState() {
+      setSelectedItem(null)
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
   // hide items with status='hidden', show rest (including greyed)
   const visible = allItems.filter(item => item.status !== 'hidden')
 
@@ -66,7 +89,7 @@ export default function MenuSection() {
             <MenuCard
               key={item.id}
               item={item}
-              onOpen={() => setSelectedItem(item)}
+              onOpen={() => openItem(item)}
             />
           ))}
         </div>
@@ -75,7 +98,7 @@ export default function MenuSection() {
       {selectedItem && (
         <ItemDrawer
           item={selectedItem}
-          onClose={() => setSelectedItem(null)}
+          onClose={closeItem}
         />
       )}
     </section>
