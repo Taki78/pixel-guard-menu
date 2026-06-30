@@ -1,0 +1,221 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 301;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--red);
+  border-radius: 14px;
+  width: min(95vw, 860px);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6), 0 0 40px rgba(224,30,46,0.1);
+  animation: popIn 0.25s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+.modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.modal__head h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal__close {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: grid;
+  place-items: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.modal__close:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal__body::-webkit-scrollbar { width: 4px; }
+.modal__body::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+.modal__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.modal__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.1rem;
+}
+
+/* Form Field */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.field-ico { color: var(--red); }
+
+.form-field__input input,
+.form-field__input textarea,
+.form-field__input select {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.6rem 0.8rem;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: var(--font-fa);
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+.form-field__input input:focus,
+.form-field__input textarea:focus,
+.form-field__input select:focus {
+  border-color: var(--red);
+}
+
+.form-field__input select option {
+  background: var(--card);
+  color: var(--text);
+}
+
+.form-field--error .form-field__input input,
+.form-field--error .form-field__input textarea {
+  border-color: var(--red);
+}
+
+.form-field__error {
+  font-size: 0.72rem;
+  color: var(--red);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Image preview */
+.img-preview {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 130px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.img-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+/* Footer */
+.modal__footer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.btn-cancel {
+  padding: 0.65rem 1.4rem;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-family: var(--font-fa);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+
+.btn-save {
+  padding: 0.65rem 1.6rem;
+  border-radius: 7px;
+  background: var(--red);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: var(--font-fa);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-save:hover {
+  background: var(--red-hover);
+  box-shadow: 0 0 16px var(--red-glow);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@media (max-width: 640px) {
+  .modal__cols { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
