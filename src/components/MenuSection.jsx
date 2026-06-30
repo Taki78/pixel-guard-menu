@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Gamepad2, Coffee, GlassWater, Zap, Sandwich, ChefHat, IceCream,
   Pizza, Cookie, Salad, Beef, Fish, CupSoda, Soup, Wine,
@@ -19,17 +19,19 @@ export default function MenuSection() {
   const { allItems, allCategories } = useItemStore()
   const [active, setActive] = useState('all')
   const [selectedItem, setSelectedItem] = useState(null)
+  // Track whether WE pushed a drawer entry — prevents interference with React Router navigation
+  const drawerPushed = useRef(false)
 
-  // Push a history entry when drawer opens so the phone's back button closes it
   function openItem(item) {
     setSelectedItem(item)
     window.history.pushState({ drawerOpen: true }, '')
+    drawerPushed.current = true
   }
 
   function closeItem() {
-    // If we pushed a history entry for this drawer, go back (triggers popstate)
-    if (window.history.state?.drawerOpen) {
-      window.history.back()
+    if (drawerPushed.current) {
+      drawerPushed.current = false
+      window.history.back()   // triggers popstate → setSelectedItem(null)
     } else {
       setSelectedItem(null)
     }
@@ -37,10 +39,21 @@ export default function MenuSection() {
 
   useEffect(() => {
     function onPopState() {
-      setSelectedItem(null)
+      // Only act if WE are the ones who pushed this drawer state
+      if (drawerPushed.current) {
+        drawerPushed.current = false
+        setSelectedItem(null)
+      }
     }
     window.addEventListener('popstate', onPopState)
-    return () => window.removeEventListener('popstate', onPopState)
+    return () => {
+      window.removeEventListener('popstate', onPopState)
+      // Clean up: if drawer was open when component unmounts (route change), pop the entry
+      if (drawerPushed.current) {
+        drawerPushed.current = false
+        window.history.back()
+      }
+    }
   }, [])
 
   // hide items with status='hidden', show rest (including greyed)
