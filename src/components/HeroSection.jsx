@@ -10,7 +10,7 @@ export default function HeroSection() {
       <div className="container hero__inner">
         <div className="hero__tag">
           <Zap size={14} />
-          <span>گیم‌نت حرفه‌ای تهران</span>
+          <span>گیم‌نت حرفه‌ای قشم</span>
         </div>
 
         <h1 className="hero__title">
